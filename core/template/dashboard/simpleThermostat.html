@@ -1,0 +1,70 @@
+<div class="ssaTempcontainer eqLogic eqLogic-widget allowResize"  data-category="#category#" data-eqLogic_id="#id#" data-version="dashboard">
+	<link rel="stylesheet" href="plugins/ssaThermostat/core/template/dashboard/css/thermometre.css" />
+	<center>
+        
+	    
+        <div class="ssathermoTetiere">
+            <span style="font-size : 1.2em;"><a href="#eqLink#">#name#</a></span><br/>
+            etat=#etat#<br>
+            modet=#mode#<br>
+        </div>
+        <div class="ssaThermo">
+            
+        <!-- bordure ext -->
+            <div class="ssaButton quarter quarter1 deFond" id="#cmd_on_id#">
+                <div class="ssaThermoButton #mode_on#">ON</div>     
+                <div class="quarter quarter1  deRelief">
+                </div>
+            </div>
+            <div class="ssaButton quarter quarter2 deFond" id="#cmd_off_id#">     
+                <div class="ssaThermoButton #mode_off#">OFF</div>     
+                <div class="quarter quarter2  deRelief"></div>
+            </div>
+            <div class="ssaButton quarter quarter3 deFond"  id="#cmd_auto_id#">
+                <div class="ssaThermoButton #mode_auto#">AUTO</div>     
+                <div class="quarter quarter3  deRelief" ></div>
+            </div>
+            <div class="ssaButton quarter quarter4 deFond"  id="#cmd_hg_id#">
+                <div class="ssaThermoButton #mode_hg#">H.gel</div> 
+                <div class="quarter quarter4  deRelief"></div>
+            </div>
+        <!-- afficheur -->
+            <div class="de">
+                <div id='animatedring' class="roue"></div>
+                <div class="dene">
+                        <div class="denem">
+                            <div class="deneme">
+                                <div class="ssatemp">28</div>
+                                <div class="ssaTempDegre">&deg;</div>
+                                <div class="ssaTempDecimal">5</div>
+                                
+                            </div>
+                            
+                            
+                        </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+        <div class="ssaThermoResume"></div>      
+        
+        <script>
+            $( document ).ready(function() {
+                $('.ssaButton').off();
+                $('.ssaButton').click(function() {
+                    var currentId = $(this).attr('id');
+		   console.log("click " +currentId)	;
+                    jeedom.cmd.execute({id: currentId});
+		});
+                
+                
+            });
+            
+                
+	</script>
+
+    </center> 
+</div>

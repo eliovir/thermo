@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<info>
+    <id>ssaThermostat</id>
+    <name>Thermostat</name>
+    <description>Thermostat SSA</description>
+    <icon>fa fa-keyboard-o</icon>
+    <licence>AGPL</licence>
+    <author>Stephane SAUTRON</author>
+    <installation>Aucune</installation>
+    <require>1.136</require>
+    <category>Thermostat</category>
+    <include type="php">ssaThermostat.inc</include>
+</info>
+

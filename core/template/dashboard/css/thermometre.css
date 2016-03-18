@@ -1,0 +1,291 @@
+:root
+{
+    --shape-form: 80% ;
+    --button-H-Align: 10px;
+    --button-V-Align: 16px;
+}
+
+.ssaThermoButton
+{   position: absolute;
+    font-size: 25px; 
+    font-weight: bold;
+    line-height: 1em;
+    color:  #D0D9DA;
+    text-shadow: 1px 4px 8px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+
+.ssaThermoButtonSelect
+{   color: #7bc1f7;
+    text-shadow: 1px 4px 8px #def, 0 0 0 #000, 1px 4px 6px #def;
+}
+.ssaTempcontainer {
+
+    width: 260px;
+    height: 300px;
+    margin: auto;
+    position: relative;
+    top: 0; left: 0; bottom: 0; right: 0;
+    border:1px dotted black;
+  
+    
+}
+@import url(http://fonts.googleapis.com/css?family=Dosis:200,400,500,600);
+
+
+
+
+.ssathermoTetiere
+{   float:left;
+    width:100%;
+    height:50%;
+    display : inline;
+    
+ 
+}
+.ssaThermo
+{   position: relative;
+    float:left;
+    left: 10px;
+    right: 10px;
+    width: 250px;
+    height: 250px;
+    display : inline;
+    
+}
+
+.ssaThermoResume
+{
+    float:left;
+    width:25%;
+    height:50%;
+    display : inline;
+    
+}
+
+.quarter {
+    
+    position: absolute;
+    width: 50%;
+    height: 50%;
+  /*transition: background-color 0.2s ease-in-out;*/
+}
+
+
+
+
+
+
+
+
+.de .den, .de .dene, .de .denem, .de .deneme, .de .roue { position: absolute;  left: 50%; top: 50%; }
+
+
+
+
+
+
+
+.quarter1 {
+  top: 0;
+  left: 0;
+  border-radius: var(--shape-form) 0 0 0;
+  background: #f2f6f5;
+  --relief-dir: 265deg;
+  --fond-dir: 265deg;
+}
+
+.quarter1 .ssaThermoButton {
+    top: var(--button-V-Align);
+    right: var(--button-H-Align);
+
+}
+
+.quarter2 {
+  top: 0;
+  right: 0;
+  background: #f2f6f5;
+  border-radius: 0 var(--shape-form) 0 0;
+  --relief-dir: -90deg;
+  --fond-dir: 265deg;
+}
+.quarter2 .ssaThermoButton {
+    top: var(--button-V-Align);
+    left: var(--button-H-Align);
+
+}
+
+
+.quarter3 {
+  bottom: 0;
+  left: 0;
+  background: #f2f6f5;
+  border-radius: 0 0 0 var(--shape-form);
+  --relief-dir: -265deg;
+  --fond-dir: 90deg;
+}
+.quarter3 .ssaThermoButton {
+    bottom: var(--button-V-Align);
+    right: var(--button-H-Align);
+
+}
+.quarter4 {
+  bottom: 0;
+  right: 0;
+   background: #f2f6f5;
+  border-radius: 0 0 var(--shape-form) 0;
+  --relief-dir: 90deg;
+  --fond-dir: 2deg;
+}
+.quarter4 .ssaThermoButton {
+    bottom: var(--button-V-Align);
+    left: var(--button-H-Align);
+
+}
+
+
+
+.deFond{
+    background: #f2f6f5;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .5), 0 1px 1px rgba(255, 255, 255, 1);
+    background: -moz-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f6f5), color-stop(100%, #cbd5d6));
+    background: -webkit-linear-gradient(var(--fond-dir), #f2f6f5 0%, #cbd5d6 100%);
+    /*background: -o-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);*/
+ 
+}
+.deRelief {
+    width: 65%;
+    height: 65%;
+    margin: 35% 35% 35% 35%;
+    background: #cbd5d6;
+    background: -moz-linear-gradient(top, #cbd5d6 0%, #f2f6f5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cbd5d6), color-stop(100%, #f2f6f5));
+    background: -webkit-linear-gradient(var(--relief-dir), #cbd5d6 0%, #f2f6f5 100%);
+    
+
+}
+
+
+
+
+
+.de {
+    position: absolute;
+    top: 20%; left: 20%;
+    width: 60%;
+    height: 60%;
+    border-radius: 100%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .1);
+    background-color: transparent;
+}
+.den {
+    position: absolute;
+    
+    width: 100%;
+    height: 100%;
+    margin: -50% 0 0 -50%;
+    border-radius: 100%;
+   
+    background: #df3341;
+    background: -moz-linear-gradient(left, #df3341 0%, #d4f355 50%, #61c0ec 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#df3341), color-stop(50%,#d4f355), color-stop(100%,#61c0ec));
+    background: -webkit-linear-gradient(left, #df3341 0%,#d4f355 50%,#61c0ec 100%);
+    background: linear-gradient(to right, #df3341 0%,#d4f355 50%,#61c0ec 100%);
+
+    
+}
+.dene {
+    width: 90%;
+    height: 90%;
+    margin: -45% 0 0 -45%;
+    border-radius: 100%;
+    box-shadow: inset 0 2px 2px rgba(255, 255, 255, .4), 0 3px 13px rgba(0, 0, 0, .85);
+    background: #f2f6f5;
+    background: -moz-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f2f6f5), color-stop(100%, #cbd5d6));
+    background: -webkit-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+    background: -o-linear-gradient(top, #f2f6f5 0%, #cbd5d6 100%);
+
+    
+}
+.denem {
+    width: 85%;
+    height: 86%;
+    margin: -43% 0 0 -43%;
+    border-radius: 100%;
+    background: #cbd5d6;
+    background: -moz-linear-gradient(top, #cbd5d6 0%, #f2f6f5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cbd5d6), color-stop(100%, #f2f6f5));
+    background: -webkit-linear-gradient(top, #cbd5d6 0%, #f2f6f5 100%);
+}
+
+.deneme {
+    padding: 20px 10px 20px 10px;
+    width: 78%;
+    height: 78%;
+    display: inline-block;
+    margin: -39% 0 0 -39%;
+    color: #555;
+    text-shadow: 1px 1px 1px white;
+    font-family: 'Dosis';
+    font-size: 50px;
+    font-weight: 800;
+    text-align: left;
+}
+
+
+
+.ssatemp {
+    position: absolute; 
+    font-size: 45px; 
+    font-weight: 800; 
+    right: 40%;
+    top: 10%;
+}
+
+.ssaTempDegre{
+    position: absolute; 
+    font-size: 20px; 
+    font-weight: 800; 
+    right: 30%;
+    top: 16%;
+}
+
+.ssaTempDecimal {
+    position: absolute; 
+    font-size: 20px; 
+    font-weight: 800; 
+    right: 15px;
+    top: 16%;
+}
+
+.degres {
+     display: none;
+}
+
+
+
+
+.roue {
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    width: 100%;
+    height: 100%;
+    margin: -50% 0 0 -50%;
+    border-radius: 100%;
+    
+    background: #df3341;
+    background: -moz-linear-gradient(left, #df3341 0%, #d4f355 50%, #61c0ec 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#df3341), color-stop(50%,#d4f355), color-stop(100%,#61c0ec));
+    background: -webkit-linear-gradient(left, #df3341 0%,#d4f355 50%,#61c0ec 100%);
+    background: linear-gradient(to right, #df3341 0%,#d4f355 50%,#61c0ec 100%);
+    animation: rota 2.5s infinite linear;
+    
+    
+}
+
+/* Animation */
+@keyframes rota {
+    from { }
+    to { transform: rotate(360deg); }
+}
