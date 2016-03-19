@@ -105,9 +105,11 @@ class ssaThermostat extends eqLogic {
         {   $ssaCmdMode= $ssaEqlogicObj->getCmd(null, 'mode');
             $ssaCmdMode->setConfiguration('etat', $_options['ordre']);
             $ssaCmdMode->save();
-            $ssaEtat= $ssaEqlogicObj->getCmd(null, 'etat'); 
-            $ssaEtat->setCollectDate('');
-            $ssaEtat->event($_options['ordre']);
+           
+            
+            //commande
+            
+            
             log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' :  change to '.$_options['ordre']);
         }
         
@@ -122,10 +124,9 @@ class ssaThermostat extends eqLogic {
         if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
         {   $log_etat=sprintf("________________________________debut________________________________");
             log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
-            
-        
             $ssaCmdMode= $ssaEqlogicObj->getCmd(null, 'mode');
-           
+        
+            
             $ssacommandePilote=$ssaEqlogicObj->getConfiguration('commande');
             if ($ssacommandePilote["tempSonde"]=='')
             {
@@ -138,7 +139,6 @@ class ssaThermostat extends eqLogic {
             //mesure temperature local
             try {
                 $localTemp=cmd::byString($ssacommandePilote["tempSonde"])->execCmd();
-                
                             
                 } catch (Exception $exc) {
                     log::add('ssaThermostat', 'error', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
@@ -456,8 +456,9 @@ class ssaThermostat extends eqLogic {
     }
 
     public static function updateMode($_options)
-    {   
-        $ssaEqlogicObj = ssaThermostat::byId($_options['thermostat_id']);
+    {   $thermostat_id= $_options['thermostat_id'];
+        
+        $ssaEqlogicObj = ssaThermostat::byId($thermostat_id);
        
         if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
         {
@@ -470,16 +471,21 @@ class ssaThermostat extends eqLogic {
                 
                 if ($_options['mode']=='auto' or $_options['mode']=='hg')
                 {  
-                     $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'true'));
-                    
+                    $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'true'));
+                    $ssaThermostatMode->setConfiguration('etat','off');
                 }
                 else {
-                     $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'false'));
+                    $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'false'));
+                    if ($_options['mode']=='on')
+                        $ssaThermostatMode->setConfiguration('etat','on');
+                    else
+                        $ssaThermostatMode->setConfiguration('etat','off');
                 }
-                $ssaThermostatMode->save();             
+                $ssaThermostatMode->save();   
+                
                 $log_etat=sprintf("set [%s]",$_options['mode']);
                 log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-          
+                
                 
                 
             }
@@ -567,6 +573,8 @@ class ssaThermostat extends eqLogic {
         if ($mc->getValue() != '') {
             return $mc->getValue();
         }
+        
+        
         /*
         $html_forecast = '';
 
@@ -577,7 +585,7 @@ class ssaThermostat extends eqLogic {
         
         $ssaCmdMode= $this->getCmd(null, 'mode');
         $mode=$ssaCmdMode->getConfiguration('mode');
-        $etat=$ssaCmdMode->getConfiguration('etat');
+        $etat=$ssaCmdMode->getConfiguration('etat') ;
         
         $replace = array(
             '#id#' => $this->getId(),
@@ -591,6 +599,7 @@ class ssaThermostat extends eqLogic {
             
         );
        
+        //Commande
         foreach ($this->getCmd('action') as $cmd) {
             $replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
             if ($mode==$cmd->getLogicalId())
@@ -598,13 +607,40 @@ class ssaThermostat extends eqLogic {
             else
               $replace['#mode_' . $cmd->getLogicalId() . '#'] = '';  
 	}
-        
+               
+        //roue
+        if ($etat=="on")
+            $replace['#activate#'] = 'roue'; 
+        else
+            $replace['#activate#'] = ''; 
         
         $html = template_replace($replace, getTemplate('core', $_version, 'simpleThermostat', 'ssaThermostat'));
+        
+        
+        
+        $log_etat=sprintf("cle cache [ssaThermostatWidget%s%s]",  $_version , $this->getId());
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        
         cache::set('ssaThermostatWidget' . $_version . $this->getId(), $html, 60);
         return $html;
     }
-
+    
+    public function refreshScreen()
+    {   
+        $_version = jeedom::versionAlias("dashboard"); 
+        $log_etat=sprintf("cle cache [ssaThermostatWidget%s%s]",  $_version , $this->getId());
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+               
+        
+        
+       
+        $mc = cache::byKey('ssaThermostatWidget' . $_version . $this->getId());
+        $mc->remove();
+	
+	//$weather->toHtml('mobile');
+	$this->toHtml('dashboard');
+	$this->refreshWidget();
+    }
     /*     * **********************Getteur Setteur*************************** */
 }
 
@@ -631,6 +667,9 @@ class ssaThermostatCmd extends cmd {
         
         $eqLogic->updateMode( array('thermostat_id' => intval($eqLogic->getId()),'mode' =>$this->getLogicalId() ) );
         $eqLogic->updateConsigne( array('thermostat_id' => intval($eqLogic->getId()),'mode' =>$this->getLogicalId() ) );
+        $eqLogic->triggerPilote( array('thermostat_id' => intval($eqLogic->getId())));
+        $eqLogic->refreshScreen();
+        
         return $this->getLogicalId();
         
     }

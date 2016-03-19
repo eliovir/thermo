@@ -1,12 +1,11 @@
-<div class="ssaTempcontainer eqLogic eqLogic-widget allowResize"  data-category="#category#" data-eqLogic_id="#id#" data-version="dashboard">
+<div style="width:260px;height:300px;" class="ssaTempcontainer eqLogic eqLogic-widget allowResize"  data-category="#category#" data-eqLogic_id="#id#" data-version="dashboard">
 	<link rel="stylesheet" href="plugins/ssaThermostat/core/template/dashboard/css/thermometre.css" />
 	<center>
         
 	    
         <div class="ssathermoTetiere">
             <span style="font-size : 1.2em;"><a href="#eqLink#">#name#</a></span><br/>
-            etat=#etat#<br>
-            modet=#mode#<br>
+        
         </div>
         <div class="ssaThermo">
             
@@ -30,7 +29,9 @@
             </div>
         <!-- afficheur -->
             <div class="de">
-                <div id='animatedring' class="roue"></div>
+                <div id='animatedring_#id#' class="#activate#">
+                    <input type="hidden" id="etat_#id#" value="#etat#">
+                </div>
                 <div class="dene">
                         <div class="denem">
                             <div class="deneme">
@@ -56,12 +57,15 @@
                 $('.ssaButton').off();
                 $('.ssaButton').click(function() {
                     var currentId = $(this).attr('id');
-		   console.log("click " +currentId)	;
-                    jeedom.cmd.execute({id: currentId});
+		    jeedom.cmd.execute({id: currentId});
 		});
+                
+           
+               
                 
                 
             });
+            
             
                 
 	</script>
