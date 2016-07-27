@@ -10,20 +10,20 @@
         <div class="ssaThermo">
             
         <!-- bordure ext -->
-            <div class="ssaButton quarter quarter1 deFond" id="#cmd_on_id#">
+            <div class="ssaButton_#id# quarter quarter1 deFond" id="#cmd_on_id#">
                 <div class="ssaThermoButton #mode_on#">ON</div>     
                 <div class="quarter quarter1  deRelief">
                 </div>
             </div>
-            <div class="ssaButton quarter quarter2 deFond" id="#cmd_off_id#">     
+            <div class="ssaButton_#id# quarter quarter2 deFond" id="#cmd_off_id#">     
                 <div class="ssaThermoButton #mode_off#">OFF</div>     
                 <div class="quarter quarter2  deRelief"></div>
             </div>
-            <div class="ssaButton quarter quarter3 deFond"  id="#cmd_auto_id#">
+            <div class="ssaButton_#id# quarter quarter3 deFond"  id="#cmd_auto_id#">
                 <div class="ssaThermoButton #mode_auto#">AUTO</div>     
                 <div class="quarter quarter3  deRelief" ></div>
             </div>
-            <div class="ssaButton quarter quarter4 deFond"  id="#cmd_hg_id#">
+            <div class="ssaButton_#id# quarter quarter4 deFond"  id="#cmd_hg_id#">
                 <div class="ssaThermoButton #mode_hg#">H.gel</div> 
                 <div class="quarter quarter4  deRelief"></div>
             </div>
@@ -54,8 +54,8 @@
         
         <script>
             $( document ).ready(function() {
-                $('.ssaButton').off();
-                $('.ssaButton').click(function() {
+                
+                $('.ssaButton_#id#').click(function() {
                     var currentId = $(this).attr('id');
 		    jeedom.cmd.execute({id: currentId});
 		});
