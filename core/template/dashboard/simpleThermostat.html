@@ -1,46 +1,66 @@
-<div style="width:260px;height:300px;" class="ssaTempcontainer eqLogic eqLogic-widget allowResize"  data-category="#category#" data-eqLogic_id="#id#" data-version="dashboard">
-	<link rel="stylesheet" href="plugins/ssaThermostat/core/template/dashboard/css/thermometre.css" />
-	<center>
+
+
+
+
+
+
+
         
 	    
-        <div class="ssathermoTetiere">
-            <span style="font-size : 1.2em;"><a href="#eqLink#">#name#</a></span><br/>
+
+<div style="width:260px;height:300px;" class="ssaTempcontainer eqLogic eqLogic-widget "  data-category="#category#" data-eqLogic_id="#id#" data-version="dashboard">
+    
+    <link rel="stylesheet" href="plugins/ssaThermostat/core/template/dashboard/css/thermometre.css" />
+    <div class="ssathermoTetiere">
+        <span style="font-size : 1.2em;"><a href="#eqLink#">#name#</a></span><br/>
+    </div>
+    
+    <div class="ssaThermostat">
         
-        </div>
         <div class="ssaThermo">
             
         <!-- bordure ext -->
-            <div class="ssaButton_#id# quarter quarter1 deFond" id="#cmd_on_id#">
-                <div class="ssaThermoButton #mode_on#">ON</div>     
+            <div class="quarter quarter1 deFond">
+                <div class="ssaThermoButton"></div>     
                 <div class="quarter quarter1  deRelief">
                 </div>
             </div>
-            <div class="ssaButton_#id# quarter quarter2 deFond" id="#cmd_off_id#">     
-                <div class="ssaThermoButton #mode_off#">OFF</div>     
+            <div class="quarter quarter2 deFond">     
+                <div class="ssaThermoButton"></div>     
                 <div class="quarter quarter2  deRelief"></div>
             </div>
-            <div class="ssaButton_#id# quarter quarter3 deFond"  id="#cmd_auto_id#">
-                <div class="ssaThermoButton #mode_auto#">AUTO</div>     
-                <div class="quarter quarter3  deRelief" ></div>
+            <div class="quarter quarter3 deFond ssaThermoButton_#id#" id="#cmd_rollDown_id#">
+                <div class="ssaThermoButton">mode -</div>     
+                <div class="quarter quarter3  deRelief"></div>
             </div>
-            <div class="ssaButton_#id# quarter quarter4 deFond"  id="#cmd_hg_id#">
-                <div class="ssaThermoButton #mode_hg#">H.gel</div> 
+            <div class="quarter quarter4 deFond ssaThermoButton_#id#" id="#cmd_rollUp_id#">
+                <div class="ssaThermoButton">mode +</div> 
                 <div class="quarter quarter4  deRelief"></div>
             </div>
+
+
         <!-- afficheur -->
             <div class="de">
-                <div id='animatedring_#id#' class="#activate#">
-                    <input type="hidden" id="etat_#id#" value="#etat#">
-                </div>
+                <div id='animatedring' class="#activate#"></div>
                 <div class="dene">
                         <div class="denem">
                             <div class="deneme">
-                                <div class="ssatemp">28</div>
+                                <div class="ssaTemp">#temp_int#</div>
                                 <div class="ssaTempDegre">&deg;</div>
-                                <div class="ssaTempDecimal">5</div>
+                                <div class="ssaTempDecimal">#temp_dec#</div>
+                               
+                            </div>
+                            <div class="ssaThermoLine"></div>
+                            <div class="denemeBas">
+                                <div class="ssaTemp">#consigne_int#</div>
+                                <div class="ssaTempDegre">&deg;</div>
+                                <div class="ssaTempDecimal">#consigne_dec#</div>
+                                <div class="ssaTermostatAction">"#mode_lib#"</div>
+                               
+                                
                                 
                             </div>
-                            
+                        
                             
                         </div>
                 </div>
@@ -50,15 +70,17 @@
 
 
         </div>
-        <div class="ssaThermoResume"></div>      
-        
+        <div class="ssaThermoResume">
+           
+        </div>      
+    </div>
         <script>
             $( document ).ready(function() {
                 
-                $('.ssaButton_#id#').click(function() {
+                $('.ssaThermoButton_#id#').click(function() {
                     var currentId = $(this).attr('id');
-		    jeedom.cmd.execute({id: currentId});
-		});
+                    jeedom.cmd.execute({id: currentId});   
+                });
                 
            
                
@@ -68,7 +90,11 @@
             
             
                 
-	</script>
-
-    </center> 
+    </script>   
+    
 </div>
+
+        
+
+
+   
