@@ -30,10 +30,10 @@ class ssaThermostat extends eqLogic {
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
      */
     
+    
+    
     public static function cron() 
     { 
-     
-      
         foreach (eqLogic::byType('ssaThermostat') as $eqLogic) {
     	
     		$autorefresh = $eqLogic->getConfiguration('autorefreshPid');
@@ -42,7 +42,7 @@ class ssaThermostat extends eqLogic {
     				$c = new Cron\CronExpression($autorefresh, new Cron\FieldFactory);
     				if ($c->isDue()) {
     					try {
-                                                $eqLogic->triggerPilote( array('thermostat_id' => intval($eqLogic->getId())));
+                                                $eqLogic->pilote();
                                                 
     						
     					} catch (Exception $exc) {
@@ -54,207 +54,37 @@ class ssaThermostat extends eqLogic {
     			}
     		}
     	} 
-      
-     
-     
      
     } 
     
-    
-    public static function cron15($_eqLogic_id = null, $_force = false)
-    {
-		if ($_eqLogic_id == null) {
-			$eqLogics = self::byType('ssaThermostat');
-		} else {
-			$eqLogics = array(self::byId($_eqLogic_id));
-		}
-		
-		foreach ($eqLogics as $eqLogic)
-                {
-                    try {
-                            $eqLogic->updateConsigne( array('thermostat_id' => intval($eqLogic->getId())));
-                        } catch (Exception $exc) {
-                            log::add('ssaThermostat', 'error', $eqLogic->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
-                             
-                        }
-		}
-    }
-    
 
-    /*
-     * Fonction exécutée automatiquement toutes les heures par Jeedom
-      public static function cronHourly() {
-
-      }
-     */
-
-    /*
-     * Fonction exécutée automatiquement tous les jours par Jeedom
-      public static function cronDayly() {
-
-      }
-     */
+   
 
 
 
     /*     * *********************Méthodes d'instance************************* */
-    public static function setOnOff($_options)
-    {   $ssaEqlogicObj = ssaThermostat::byId($_options['thermostat_id']);
+    private function setOnOff($ordre)
+    {   
         
-        if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
-        {   $ssaCmdMode= $ssaEqlogicObj->getCmd(null, 'mode');
-            $ssaCmdMode->setConfiguration('etat', $_options['ordre']);
-            $ssaCmdMode->save();
+        if ( $this->getIsEnable() == 1)
+        {   $ssaCmdEtat= $this->getCmd(null, 'etat');
+            $ssaCmdEtat->setConfiguration('etat_id', $ordre);
+            $ssaCmdEtat->setCollectDate('');
+            $ssaCmdEtat->event($ordre);
+            $ssaCmdEtat->save();
            
             
             //commande
             
             
-            log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' :  change to '.$_options['ordre']);
+            log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' :  change to '.$ordre );
         }
         
         
     }
    
-     
-    public static function triggerPilote($_options)
-    {   $thermostat_id=$_options['thermostat_id'];
-    
-        $ssaEqlogicObj = ssaThermostat::byId($_options['thermostat_id']);
-        if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
-        {   $log_etat=sprintf("________________________________debut________________________________");
-            log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
-            $ssaCmdMode= $ssaEqlogicObj->getCmd(null, 'mode');
-        
-            
-            $ssacommandePilote=$ssaEqlogicObj->getConfiguration('commande');
-            if ($ssacommandePilote["tempSonde"]=='')
-            {
-               $log_etat=sprintf("pas de sonde");
-               log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-               return ;
-           
-            }
-            
-            //mesure temperature local
-            try {
-                $localTemp=cmd::byString($ssacommandePilote["tempSonde"])->execCmd();
-                            
-                } catch (Exception $exc) {
-                    log::add('ssaThermostat', 'error', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
-                    return; 
-                }
-            
-           
-            
-               
-           
-             
-            
-            
-            
-            $dataPid=$ssaCmdMode->getConfiguration('dataPid');
-            $mode=$ssaCmdMode->getConfiguration('mode');
-            $etat=$ssaCmdMode->getConfiguration('etat');
-            $consigne=$ssaCmdMode->getConfiguration('consigne');
-            
-            if ($consigne["temp"]=='')
-            {  $log_etat=sprintf("consigne not set");
-               log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-               return ;
-                
-            }
-            
-            if ($etat=='')
-            {
-                $etat='off';
-            }
-         
-            
-            $log_etat=sprintf("mode[%s] etat[%s]",$mode,$etat);
-            log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-            
-            
-
-            if ($mode=='on' && $etat=='off')
-            {   $ssaEqlogicObj->setOnOff(array('thermostat_id'=>$thermostat_id,'ordre'=>'on'));
-                //cmd marche
-
-                return ;
-            }
-
-            if ($mode=='off' && $etat=='on')
-            {  $ssaEqlogicObj->setOnOff(array('thermostat_id'=>$thermostat_id,'ordre'=>'off'));
-               //cmd arret
-
-               return ;
-            }
-
-           
-           
-
-            if ( $mode=='auto' || $mode=='hg')
-            {  
-                $pid= new ssaThermostatPID($dataPid,$ssaEqlogicObj->getHumanName(),$consigne["temp"],$localTemp);
-              
-                
-                $pid->pilote();
-                
-                
-                $newData=$pid->getPidData();
-                $log_etat=  json_encode($newData);
-                log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-            
-                
-                $ssaEqlogicObj->setDataPid($ssaCmdMode,$newData);
-                
-               
-            
-                //ordre script pid
-                $relay=$newData['Relay'];
-                
-               
-                
-                $log_etat=sprintf("relay[%s]",$relay);
-                log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-                
-                
-                if ($relay=='on')
-                {   if ($etat=='off') 
-                    {       
-                           $ssaEqlogicObj->setOnOff(array('thermostat_id'=>$thermostat_id,'ordre'=>'on'));
-                            //commande marche
-                    }
-                    else
-                    {   
-                        $log_etat=sprintf("etat -> deja On");
-                        log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-               
-                    }
-                } 
-                else
-                { 
-                    if ($etat=='on') 
-                    {   
-                        $ssaEqlogicObj->setOnOff(array('thermostat_id'=>$thermostat_id,'ordre'=>'off'));
-                        //commande arret
-                    }
-                    else
-                    {  
-                       
-                       $log_etat=sprintf("etat -> deja Off");
-                       log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-                    }
-                }  
-
-            } 
-         }
-        
-        
-        
-    }
-    
-    
+   
+   
     
     
     
@@ -264,17 +94,26 @@ class ssaThermostat extends eqLogic {
     }
 
     public function postInsert() {
+       //createInfoCmd($name,$unit,$onlyEvent,$subType, $configuration,$default)
+       //$ssaThermostatMode->setConfiguration('mode_lib',$tabmode[$currentMode]);
+       $modeConf=array('mode_lib'=>'Off','mode_id'=>0) ;
+       $mode= $this->createInfoCmd("mode", '', 1, "string",$modeConf,'Off');
+      
+     
+       $temp= $this->createInfoCmd("temperature", '°C', 1, "numeric",array(),0);
+       $consigne= $this->createInfoCmd("consigne", '°C', 1, "numeric",array(),7);
+       $etat= $this->createInfoCmd("etat", '', 1, "binary",array('etat_id'=>0),0);
+
+      
+       
+       $this->createActionCmd("rollUp",$mode);
+       $this->createActionCmd("rollDown",$mode);
        
        
-       $mode= $this->createInfoCmd("mode", '', 1, "string");
-        
-       $this->createActionCmd("on",$mode);
-       $this->createActionCmd("auto",$mode);
-       $this->createActionCmd("off",$mode);
-       $this->createActionCmd("hg",$mode);
+       $this->setDataPid(array());
        
-       $ssaThermostatMode= $this->getCmd(null, 'mode'); 
-       $this->setDataPid($ssaThermostatMode,array());
+       
+       
         
     }
 
@@ -345,10 +184,19 @@ class ssaThermostat extends eqLogic {
         
     }
     
-    public static function setDataPid($ssaObj, $value)
+    private function setDataPid($value)
     {
          //conf pid
-        if ($ssaObj->getConfiguration('dataPid') == '') 
+        $conf=$this->getConfiguration('dataPid');
+        
+        /*
+        $log_etat=sprintf("conf [%s]",json_encode($conf));
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
+       
+        $log_etat=sprintf("value [%s]",json_encode($value));
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
+        */
+        if ($conf == '') 
         {   
             
             $conf= array(
@@ -357,7 +205,7 @@ class ssaThermostat extends eqLogic {
             'kd' => 1,
             'controllerdirection' =>'DIRECT',
             'output' =>0,
-            'inAuto' =>'false',
+            'inAuto' =>'true',
             'SampleTime' =>10,
             'lastTime' => time(),
             'ITerm' => 0,                          
@@ -372,23 +220,18 @@ class ssaThermostat extends eqLogic {
              );
             
 	}
-        else {
-            $conf=$ssaObj->getConfiguration('dataPid');
-            
-        }
-        
+      
         foreach ($value as $k => $v)
         {   $conf[$k]=$v;
             
         }
-        try {
-            $ssaObj->setConfiguration('dataPid', $conf);
-            $ssaObj->save();
         
-        } catch (Exception $exc) {
-            log::add('ssaThermostat', 'error',' : ' . $exc->getMessage());
-                             
-        }
+        $this->setConfiguration('dataPid', $conf);
+        $this->save();
+        /*
+        $log_etat=sprintf("fin [%s]",json_encode($conf));
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
+           */
         
         
     }
@@ -410,9 +253,17 @@ class ssaThermostat extends eqLogic {
                
         
     }
+    /* @param string $name
+     * @param string $unit
+     * @param string $onlyEvent
+     * @param string $subType
+     * @param string $configuration
+     * @param string $default
+     * 
+     */
     
-    public  function createInfoCmd($name,$unit,$onlyEvent,$subType)
-    {
+    public  function createInfoCmd($name,$unit,$onlyEvent,$subType, $configuration,$default)
+    {   //numeric   
         $ssaThermostatCmd = $this->getCmd(null, $name);
 	if (!is_object($ssaThermostatCmd)) {
             $ssaThermostatCmd = new ssaThermostatCmd();
@@ -422,9 +273,16 @@ class ssaThermostat extends eqLogic {
 	$ssaThermostatCmd->setEqLogic_id($this->getId());
 	$ssaThermostatCmd->setUnite($unit);
         $ssaThermostatCmd->setType('info');
+        $ssaThermostatCmd->setValue($default);
 	$ssaThermostatCmd->setEventOnly($onlyEvent);
 	$ssaThermostatCmd->setSubType($subType);
        // $ssaThermostatCmd->setIsVisible(1);
+        foreach($configuration as $cle=>$valeur){
+                // Affichage
+		
+                $ssaThermostatCmd->setConfiguration($cle,$valeur);
+	}
+        
 	$ssaThermostatCmd->save(); 
         
         return $ssaThermostatCmd->getId();
@@ -455,98 +313,8 @@ class ssaThermostat extends eqLogic {
         
     }
 
-    public static function updateMode($_options)
-    {   $thermostat_id= $_options['thermostat_id'];
-        
-        $ssaEqlogicObj = ssaThermostat::byId($thermostat_id);
-       
-        if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
-        {
-            if (jeedom::isDateOk()) 
-            {    
-                $ssaThermostatMode= $ssaEqlogicObj->getCmd(null, 'mode'); 
-                $ssaThermostatMode->setConfiguration('mode',$_options['mode']);
-                $ssaThermostatMode->setCollectDate('');
-                $ssaThermostatMode->event($_options['mode']);
-                
-                if ($_options['mode']=='auto' or $_options['mode']=='hg')
-                {  
-                    $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'true'));
-                    $ssaThermostatMode->setConfiguration('etat','off');
-                }
-                else {
-                    $ssaEqlogicObj->setDataPid($ssaThermostatMode,array('inAuto'=>'false'));
-                    if ($_options['mode']=='on')
-                        $ssaThermostatMode->setConfiguration('etat','on');
-                    else
-                        $ssaThermostatMode->setConfiguration('etat','off');
-                }
-                $ssaThermostatMode->save();   
-                
-                $log_etat=sprintf("set [%s]",$_options['mode']);
-                log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-                
-                
-                
-            }
-        }
-        
-        
-        
-    }
     
-    public static function updateConsigne($_options) 
-    {   $ssaEqlogicObj = ssaThermostat::byId($_options['thermostat_id']);
-	
-        if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
-        {
-    
-            $time=date('Hi', time() );
-            $now=DateTime::createFromFormat('Hi', $time);
-
-           
-            $plages=$ssaEqlogicObj->getConfiguration('plages');
-
-            $default=$ssaEqlogicObj->getConfiguration('defaultTemp');
-
-            //var_dump($plages);
-            $consigneTemp = $default["defaultTemp"];
-            $consignePlage= "plage par defaut";
-            foreach ($plages as $plage)
-            { 
-                $debut = DateTime::createFromFormat('H:i', $plage["debut"]);
-                $fin = DateTime::createFromFormat('H:i', $plage["fin"]);
-                if ($now >= $debut &&  $now < $fin)
-                {   log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : plage ['.$plage["name"].'] ->'.$plage["debut"]." ".$plage["fin"] );
-                    $consigneTemp =  $plage["consigne"];
-                    $consignePlage=  $plage["name"];
-                }
-
-
-            }
-        
-           
-            $ssaCmd= $ssaEqlogicObj->getCmd(null, 'mode');
-            $mode=$ssaCmd->execCmd();
-            if ($mode=="hg")
-            {   
-                $consigneTemp = $default["hgTemp"];
-                $consignePlage= "temperature hors gel";
-            }
-            
-            log::add('ssaThermostat','debug', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' . ' : plage ['.$consignePlage .'] consigne ['.$consigneTemp.']');
-            if (jeedom::isDateOk()) 
-            {
-                $ssaThermostatMode=$ssaEqlogicObj->getCmd(null, 'mode');
-                $ssaThermostatMode->setConfiguration('consigne',array('plage'=>$consignePlage,'temp'=>$consigneTemp));
-                $ssaThermostatMode->save();
-                
-            }
-	
-	}
-    }
-    
-    
+   
    
     
 
@@ -574,62 +342,62 @@ class ssaThermostat extends eqLogic {
             return $mc->getValue();
         }
         
-        
-        /*
-        $html_forecast = '';
-
-        if ($_version != 'mobile' || $this->getConfiguration('fullMobileDisplay', 0) == 1) {
-           $thermostat_template = getTemplate('core', $_version, 'simpleThermostat', 'ssaThermostat');
+        $log_etat=sprintf("entrer");
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
             
-        }*/
+        $localConsigne=$this->getConsigne();
+        list($consigne_int, $consigne_dec)=explode(".", (double)$localConsigne);
+         
+       
+        $localMode=$this->getModeLib();
+        $localTemp=$this->getTemperature();
+        list($temp_int, $temp_dec)=explode(".", (double)$localTemp);
+        $localEtat=$this->getEtat();
+       
+       
         
-        $ssaCmdMode= $this->getCmd(null, 'mode');
-        $mode=$ssaCmdMode->getConfiguration('mode');
-        $etat=$ssaCmdMode->getConfiguration('etat') ;
+        
+        
         
         $replace = array(
             '#id#' => $this->getId(),
             '#name#'=>$this->getName(),
             '#background_color#' => $this->getBackgroundColor($_version),
             '#eqLink#' => $this->getLinkToConfiguration(),
-            '#etat#'=>$etat,
-            '#mode#'=>$mode
-            
-                
+            '#etat#'=>$localEtat,
+            '#mode_lib#'=>$localMode,
+            '#consigne_int#'=>$consigne_int  ,  
+            '#consigne_dec#'=>$consigne_dec ,  
+            '#temp_int#'=>$temp_int  ,  
+            '#temp_dec#'=>$temp_dec
             
         );
        
         //Commande
         foreach ($this->getCmd('action') as $cmd) {
             $replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
-            if ($mode==$cmd->getLogicalId())
-              $replace['#mode_' . $cmd->getLogicalId() . '#'] = 'ssaThermoButtonSelect';
-            else
-              $replace['#mode_' . $cmd->getLogicalId() . '#'] = '';  
+             
 	}
                
         //roue
-        if ($etat=="on")
+        if ($localEtat==1)
             $replace['#activate#'] = 'roue'; 
         else
             $replace['#activate#'] = ''; 
         
+        
         $html = template_replace($replace, getTemplate('core', $_version, 'simpleThermostat', 'ssaThermostat'));
-        
-        
-        
-        $log_etat=sprintf("cle cache [ssaThermostatWidget%s%s]",  $_version , $this->getId());
-        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-        
         cache::set('ssaThermostatWidget' . $_version . $this->getId(), $html, 60);
         return $html;
     }
+    
+    
     
     public function refreshScreen()
     {   
         $_version = jeedom::versionAlias("dashboard"); 
         $log_etat=sprintf("cle cache [ssaThermostatWidget%s%s]",  $_version , $this->getId());
-        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        //log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
                
         
         
@@ -641,7 +409,319 @@ class ssaThermostat extends eqLogic {
 	$this->toHtml('dashboard');
 	$this->refreshWidget();
     }
-    /*     * **********************Getteur Setteur*************************** */
+    
+    
+    /*     * **********************Reactoringr*************************** */
+     public static function roll($_options)
+    {   
+        $tabmode=array("Off","On","Auto","Hors gel");
+        $thermostat_id= $_options['thermostat_id'];
+        $action= $_options['action'];
+        $ssaEqlogicObj = ssaThermostat::byId($thermostat_id);
+        
+
+        if (is_object($ssaEqlogicObj) && $ssaEqlogicObj->getIsEnable() == 1)
+        {
+            if (jeedom::isDateOk()) 
+            {    
+                $ssaThermostatMode= $ssaEqlogicObj->getCmd(null, 'mode'); 
+                $currentMode=$ssaThermostatMode->getConfiguration('mode_id');
+                if ($action=="up")
+                {  $currentMode=$currentMode+1;
+                   if ($currentMode >3)
+                      $currentMode =3; 
+
+                }
+                else
+                {  $currentMode=$currentMode - 1;
+                   if ($currentMode <0)
+                      $currentMode = 0; 
+
+                }
+                $log_etat=sprintf("set [%s]",$tabmode[$currentMode]);
+                log::add('ssaThermostat','debug',  $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+
+
+                $ssaThermostatMode->setConfiguration('mode_id',$currentMode);
+                $ssaThermostatMode->setConfiguration('mode_lib',$tabmode[$currentMode]);
+                
+                $ssaThermostatMode->setCollectDate('');
+                $ssaThermostatMode->event($tabmode[$currentMode]);
+                
+                
+                $ssaThermostatMode->save();  
+                $ssaEqlogicObj->pilote();
+                
+            }
+            
+        }
+    }
+    
+    
+      //0->off 1-->on
+    private function getEtat()
+    {
+        $log_etat=sprintf("enter");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        $ssaThermostatCmd= $this->getCmd(null, 'etat');
+        $currentEtat=$ssaThermostatCmd->getConfiguration('etat_id');
+        return $currentEtat;
+
+
+    }
+    
+    private function getTemperatureCmdId()
+    {  $ssaThermostatCmd= $this->getCmd(null, 'temperature');
+       return $ssaThermostatCmd->getId();
+        
+    }
+    
+    //calcule la temperature et la sauvegarde dans lobjet
+    private function getTemperature()
+    {   $localTemp=0;
+        $log_etat=sprintf("enter");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+      
+        $ssacommandePilote=$this->getConfiguration('commande');
+        if ($ssacommandePilote["tempSonde"]=='')
+        {
+            $log_etat=sprintf("pas de sonde");
+            log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+            
+        }
+        else    
+        {
+        //mesure temperature local
+            try {
+                $localTemp=cmd::byString($ssacommandePilote["tempSonde"])->execCmd();
+                            
+                } catch (Exception $exc) {
+                    log::add('ssaThermostat', 'error', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
+                    
+                }
+        }
+
+        $log_etat=sprintf("set temperature [%s]",$localTemp);
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        
+
+        $ssaThermostatCmd= $this->getCmd(null, 'temperature');
+        $ssaThermostatCmd->setConfiguration('degres',$localTemp);
+                
+        $ssaThermostatCmd->setCollectDate('');
+        $ssaThermostatCmd->event($localTemp);
+                
+                
+        $ssaThermostatCmd->save();   
+        return $localTemp;
+
+
+    }
+    
+    private function getDataPid()
+    {
+        $log_etat=sprintf("enter");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        $currentPid=$this->getConfiguration('dataPid');
+        return $currentPid;
+        
+    }
+    
+    
+    
+    private  function getConsigne()
+    {
+        $log_etat=sprintf("enter");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        
+        $consigneTemp=7.5;
+        
+        if ( $this->getIsEnable() == 1)
+        {
+    
+            $time=date('Hi', time() );
+            $now=DateTime::createFromFormat('Hi', $time);
+
+           
+            $plages=$this->getConfiguration('plages');
+            $default=$this->getConfiguration('defaultTemp');
+
+            
+            $consigneTemp = $default["defaultTemp"];
+            $consignePlage= "plage par defaut";
+            
+            foreach ($plages as $plage)
+            { 
+                $debut = DateTime::createFromFormat('H:i', $plage["debut"]);
+                $fin = DateTime::createFromFormat('H:i', $plage["fin"]);
+                if ($now >= $debut &&  $now < $fin)
+                {   
+                    
+                    $log_etat=sprintf('plage [%s]->[%s,%s]',$plage["name"],$plage["debut"],$plage["fin"]);
+                    log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        
+                
+                    $consigneTemp =  $plage["consigne"];
+                    $consignePlage=  $plage["name"];
+                }
+
+
+            }
+        
+            $localMode=$this->getMode();
+            
+            if ($localMode==3)
+            {   
+                $consigneTemp = $default["hgTemp"];
+                $consignePlage= "temperature hors gel";
+            }
+            
+            $log_etat=sprintf('plage [%s] consigne [%s]',$consignePlage,$consigneTemp);
+            log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        
+            if (jeedom::isDateOk()) 
+            {
+                $ssaThermostatCmd= $this->getCmd(null, 'consigne');
+                $ssaThermostatCmd->setConfiguration('degres',$consigneTemp);
+                $ssaThermostatCmd->setConfiguration('plage',$consignePlage);
+                $ssaThermostatCmd->setCollectDate('');
+                $ssaThermostatCmd->event($consigneTemp);
+                $ssaThermostatCmd->save(); 
+                
+            }
+	
+	}
+        return $consigneTemp;
+       
+
+
+    }
+
+    
+      //recupere le mode de l'objet
+    //("Off","On","Auto","Hors gel");
+    private  function getMode()
+    {
+        $log_etat=sprintf("enter");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        $ssaThermostatCmd= $this->getCmd(null, 'mode');
+        $currentMode=$ssaThermostatCmd->getConfiguration('mode_id');
+        return $currentMode;
+
+
+    }
+    
+    private function getPidOrder()
+    {  
+        $log_etat=sprintf("enter consigne[%s] temp[%s]",$this->getConsigne(),$this->getTemperature());
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+       
+        $pid= new ssaThermostatPID($this->getDataPid(),$this->getHumanName(),$this->getConsigne(),$this->getTemperature());
+        $ordre=$pid->pilote();
+        $this->setDataPid($pid->getPidData());
+        
+        $log_etat=sprintf("pid result  [%s]",$ordre);
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+       
+        
+        if ($ordre=='on')
+            return 1;
+        else
+            return 0;
+        
+        
+    }
+    
+       //recupere le mode de l'objet
+    //("Off","On","Auto","Hors gel");
+    private  function getModeLib()
+    {
+        $log_etat=sprintf("get");
+        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+        $ssaThermostatCmd= $this->getCmd(null, 'mode');
+        $currentMode=$ssaThermostatCmd->getConfiguration('mode_lib');
+        return $currentMode;
+
+
+    }
+    
+    private function pilote()
+    {   
+        $log_etat=sprintf("entrer");
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
+            
+        if ($this->getIsEnable() == 1)
+        {   
+            $localConsigne=$this->getConsigne();
+            $localMode=$this->getMode();
+            $localTemp=$this->getTemperature();
+            $localEtat=$this->getEtat();
+       
+            if ($localEtat=='')
+            {
+                $localEtat=0;
+            }
+            $log_etat=sprintf("mode[%s] etat[%s]",$localMode,$localEtat);
+            log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+
+            //("Off","On","Auto","Hors gel");
+            if ($localMode==1 && $localEtat==0)
+            {   $this->setOnOff(1);
+                //cmd marche
+               
+            }
+            if ($localMode==0 && $localEtat==1)
+            {  $this->setOnOff(0);
+               //cmd arret              
+            }
+
+           
+           
+
+            if ( $localMode>1)
+            {  
+              
+                //0:mustOff 1:mustOn
+                $mustOnOff=$this->getPidOrder();
+                
+                $log_etat=sprintf("mustOnOff[%s] localEtat[%s]",$mustOnOff, $localEtat);
+                log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+               
+                if ($mustOnOff==1)
+                {   if ($localEtat==0) 
+                    {     $this->setOnOff(1);  
+                          //commande marche
+                    }
+                    else
+                    {   
+                        $log_etat=sprintf("etat -> deja On");
+                        log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+               
+                    }
+                } 
+                else
+                { 
+                    if ($localEtat==1) 
+                    {   $this->setOnOff(0); 
+                        
+                        //commande arret
+                    }
+                    else
+                    {  
+                       
+                       $log_etat=sprintf("etat -> deja Off");
+                       log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
+                    }
+                }  
+
+            } 
+            $this->refreshScreen();
+         }
+        
+        
+        
+    }
+    
 }
 
 class ssaThermostatCmd extends cmd {
@@ -663,12 +743,17 @@ class ssaThermostatCmd extends cmd {
     public function execute($_options = array())
     {   
         $eqLogic = $this->getEqLogic();
-        log::add('ssaThermostat','debug',  $eqLogic->getHumanName().'['.__FUNCTION__.']' . ' : appel');
+        log::add('ssaThermostat','debug',  $eqLogic->getHumanName().'['.__FUNCTION__.']' . ' : appel '.$this->getLogicalId());
+        if ($this->getLogicalId() == 'rollUp') 
+        {  $eqLogic->roll(array('thermostat_id' => intval($eqLogic->getId()),'action' =>'up' ));
+
+        }
+        if ($this->getLogicalId() == 'rollDown') 
+        {  $eqLogic->roll(array('thermostat_id' => intval($eqLogic->getId()),'action' =>'down' ));
+        }
         
-        $eqLogic->updateMode( array('thermostat_id' => intval($eqLogic->getId()),'mode' =>$this->getLogicalId() ) );
-        $eqLogic->updateConsigne( array('thermostat_id' => intval($eqLogic->getId()),'mode' =>$this->getLogicalId() ) );
-        $eqLogic->triggerPilote( array('thermostat_id' => intval($eqLogic->getId())));
-        $eqLogic->refreshScreen();
+        
+        //$eqLogic->refreshScreen();
         
         return $this->getLogicalId();
         
