@@ -7,7 +7,7 @@
 
 .ssaThermoButton
 {   position: absolute;
-    font-size: 25px; 
+    font-size: 20px; 
     font-weight: bold;
     line-height: 1em;
     color:  #D0D9DA;
@@ -18,14 +18,23 @@
 {   color: #7bc1f7;
     text-shadow: 1px 4px 8px #def, 0 0 0 #000, 1px 4px 6px #def;
 }
-.ssaTempcontainer {
 
-    width: 260px;
+.ssaTempcontainer{
+    
+    
+
+}
+
+.ssaThermostat {
+    max-width: 260px;
+    max-height: 300px;
+     width: 260px;
     height: 300px;
+    margin: auto;
     margin: auto;
     position: relative;
     top: 0; left: 0; bottom: 0; right: 0;
-    border:1px dotted black;
+    
   
     
 }
@@ -37,19 +46,19 @@
 .ssathermoTetiere
 {   float:left;
     width:100%;
-    height:50%;
-    display : inline;
+    height:10%;
+    display : inline-block;
     
  
 }
 .ssaThermo
 {   position: relative;
-    float:left;
-    left: 10px;
-    right: 10px;
-    width: 250px;
-    height: 250px;
-    display : inline;
+    margin-top: 15%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 94%;
+    height: 82%;
+    display : block;
     
 }
 
@@ -77,7 +86,8 @@
 
 
 
-.de .den, .de .dene, .de .denem, .de .deneme, .de .roue { position: absolute;  left: 50%; top: 50%; }
+.de .den, .de .dene, .de .denem, .de .roue { position: absolute;  left: 50%; top: 50%; }
+/*.de .deneme, .de .denemeBas,*/
 
 
 
@@ -220,47 +230,112 @@
 }
 
 .deneme {
-    padding: 20px 10px 20px 10px;
+    position: absolute;  
+    left: 50%; top: 42%;
+    /*padding: 20px 10px 20px 10px;*/
+    
     width: 78%;
-    height: 78%;
+    height: 34%;
     display: inline-block;
-    margin: -39% 0 0 -39%;
+    margin: -39% 0 0 -20%;
+
     color: #555;
     text-shadow: 1px 1px 1px white;
     font-family: 'Dosis';
-    font-size: 50px;
+    font-size: 16px;
+
     font-weight: 800;
+    text-align: left;
+
+    
+}
+
+
+.denemeBas {
+   position: absolute;  
+    left: 50%; top: 90%;
+    /*padding: 20px 10px 20px 10px;*/
+    
+    width: 78%;
+    height: 34%;
+    display: inline-block;
+    margin: -39% 0 0 -39%;
+
+    color: #558;
+    text-shadow: 1px 1px 1px white;
+    font-family: 'Dosis';
+    font-size: 8px;
+    font-weight: 300;
     text-align: left;
 }
 
 
+.ssaTemp {
+   /* position: absolute; */
+    
+    
+    height: 100%; 
+    float:left;
 
-.ssatemp {
-    position: absolute; 
-    font-size: 45px; 
-    font-weight: 800; 
-    right: 40%;
-    top: 10%;
+    text-align: right;
+    font-size: 3em;
+   
+    
 }
 
 .ssaTempDegre{
-    position: absolute; 
-    font-size: 20px; 
-    font-weight: 800; 
-    right: 30%;
-    top: 16%;
+    
+    
+    
+    padding-top:10%;
+    
+    float:left;
+
+    font-size: 1em; 
+    text-align: left;
+   /* border:1px dotted black;*/
+    
+
 }
 
 .ssaTempDecimal {
-    position: absolute; 
-    font-size: 20px; 
-    font-weight: 800; 
-    right: 15px;
-    top: 16%;
+    padding-top: 10%;
+    
+    float:left;
+
+    font-size: 1em; 
+    text-align: right;
+    
+    
+    
+       
+}
+.ssaTermostatActionTitle{
+    padding-top: 12%;
+    
+    font-size: 1em; 
+    
+    float:right;
+    text-align: left;
+    
+
+}
+.ssaTermostatAction{
+    padding-top: 10%;
+    
+    
+    float:right;
+    
+    font-size: 1.5em; 
+    text-align: right;
+    
+    
+    
 }
 
 .degres {
      display: none;
+
 }
 
 
@@ -283,6 +358,20 @@
     
     
 }
+
+
+
+
+
+
+
+.ssaThermoLine{ 
+    position: absolute;  
+    top: 52%;
+    width:100%;
+     height:1px;
+      background: #fff;
+  }
 
 /* Animation */
 @keyframes rota {
