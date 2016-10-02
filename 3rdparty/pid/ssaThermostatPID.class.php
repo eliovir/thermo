@@ -114,8 +114,8 @@ class ssaThermostatPID
       
       
 
-      $this->Input=$temperature;
-      $this->Setpoint=$consigne;
+      $this->Input=(double)$temperature;
+      $this->Setpoint=(double)$consigne;
 
    }
 
@@ -126,7 +126,7 @@ class ssaThermostatPID
       $restant=($this->WINDOWS_start_time + $this->WINDOWS_on_size) - $this->now ;
       
       $log_etat=sprintf("WINDOWS_runing[%s] WINDOWS_on_size[%d] reste[%d]",$this->WINDOWS_runing, $this->WINDOWS_on_size ,$restant);
-      log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+      //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
       
       
       if($this->WINDOWS_runing=='on')
@@ -138,7 +138,7 @@ class ssaThermostatPID
         { //fin ON
             
             $log_etat=sprintf("fin relay on");
-            log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+            //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
       
             
             $this->Relay='off';
@@ -151,14 +151,14 @@ class ssaThermostatPID
            { //fin de plage
                 $this->WINDOWS_runing='off';
                 $log_etat=sprintf("fin plage");
-                log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+                //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
       
            }
            else
            {
                
                 $log_etat=sprintf("plage en cours");
-                log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+                //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
       
             }
          }
@@ -173,7 +173,7 @@ class ssaThermostatPID
          if ($this->Output == 0)
          { //rien a faire
             $log_etat=sprintf("pid==0");
-            log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+            //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
        
 
          }
@@ -185,7 +185,7 @@ class ssaThermostatPID
            $this->Relay='on';
            $this->WINDOWS_runing='on';
            $log_etat=sprintf("odre Relay ON");
-           log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+           //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
        
 
          }
@@ -193,7 +193,7 @@ class ssaThermostatPID
 
 
       }
-
+      return $this->Relay;
    }
 
    
