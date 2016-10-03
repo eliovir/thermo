@@ -122,6 +122,8 @@ class ssaThermostatPID
 
    function pilote()
    {  
+       $log_etat=sprintf(" enterData [%s]",  json_encode($this->getPidData()));
+       log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
        
       $restant=($this->WINDOWS_start_time + $this->WINDOWS_on_size) - $this->now ;
       
