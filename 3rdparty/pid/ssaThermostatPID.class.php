@@ -120,6 +120,8 @@ class ssaThermostatPID
    }
 
 
+   
+   
    function pilote()
    {  
        $log_etat=sprintf(" enterData [%s]",  json_encode($this->getPidData()));
@@ -172,6 +174,87 @@ class ssaThermostatPID
       else
       {  //nouvelle plage
          $this->Compute();
+         if ($this->Output == 0)
+         { //rien a faire
+            $log_etat=sprintf("pid==0");
+            //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+       
+
+         }
+         else
+         { //consigne chauffe
+           $this->WINDOWS_start_time = $this->now;
+           $tmp= ($this->Output * $this->WINDOWS_size) / $this->outMax; 
+           $this->WINDOWS_on_size= ($tmp<180)?180:$tmp;
+           $this->Relay='on';
+           $this->WINDOWS_runing='on';
+           $log_etat=sprintf("odre Relay ON");
+           //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+       
+
+         }
+
+
+
+      }
+      return $this->Relay;
+   }
+
+   
+   
+   
+   function pilote2()
+   {  
+       $log_etat=sprintf(" enterData [%s]",  json_encode($this->getPidData()));
+       log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+       
+       $restant=($this->WINDOWS_start_time + $this->WINDOWS_on_size) - $this->now ;
+      
+       $log_etat=sprintf("WINDOWS_runing[%s] WINDOWS_on_size[%d] reste[%d]",$this->WINDOWS_runing, $this->WINDOWS_on_size ,$restant);
+       log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+       $this->Compute();
+      
+       if($this->WINDOWS_runing=='on')
+        { //plage en cours
+		
+        
+
+            if  ( (($this->WINDOWS_start_time + $this->WINDOWS_on_size) < $this->now) &&  $this->Relay=='on')
+            { //fin ON
+
+                $log_etat=sprintf("fin relay on");
+                //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+
+
+                $this->Relay='off';
+
+            } 
+            else
+            {
+               //test fin de plage 
+               if  (($this->WINDOWS_start_time + $this->WINDOWS_size) < $this->now) 
+               { //fin de plage
+                    $this->WINDOWS_runing='off';
+                    $log_etat=sprintf("fin plage");
+                    //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+
+               }
+               else
+               {
+
+                    $log_etat=sprintf("plage en cours");
+                    //log::add('ssaThermostat','debug',  $this->thermostat.'[PID]['.__FUNCTION__.']' .  ' : '. $log_etat);
+
+                }
+             }
+
+
+
+
+      }
+      else
+      {  //nouvelle plage
+         
          if ($this->Output == 0)
          { //rien a faire
             $log_etat=sprintf("pid==0");
