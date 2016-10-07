@@ -200,8 +200,8 @@ class ssaThermostat extends eqLogic {
         {   
             
             $conf= array(
-            'kp' => 2,
-            'ki' => 5,
+            'kp' => 45,
+            'ki' => 0.05,
             'kd' => 1,
             'controllerdirection' =>'DIRECT',
             'output' =>0,
