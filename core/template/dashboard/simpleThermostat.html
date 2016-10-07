@@ -70,13 +70,10 @@
 
 
         </div>
-        <div class="ssaThermoResume" id="actiontest">
-            <span class="history_ cursor_" data-cmd_id="220">
-                    <i class=""></i>
-                    <strong class="tooltips" title="#temperature_collectDate#" style="font-size:1.1em;">historique</strong> °C
-           
-            
-            </span>
+        <div class="ssaThermoResume" id="ssaHisto_#id#">
+        
+               <strong class="tooltips" title="#temperature_collectDate#" style="font-size:1.1em;">historique</strong>
+        
             
         </div>    
         
@@ -93,9 +90,9 @@
                 });
                 
            
-                $('#actiontest').click(function() {
+                $('#ssaHisto_#id#').click(function() {
                     $('#md_modal').dialog({title: "Historique"});
-                    $('#md_modal').load('index.php?v=d&plugin=ssaThermostat&modal=modal.ssaThermostat&ssa=220,219,221').dialog('open');
+                    $('#md_modal').load('index.php?v=d&plugin=ssaThermostat&modal=modal.ssaThermostat&ssa=#liste_info#').dialog('open');
                
                 });
                

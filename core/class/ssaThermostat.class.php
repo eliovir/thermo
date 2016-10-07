@@ -378,7 +378,15 @@ class ssaThermostat extends eqLogic {
             $replace['#cmd_' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
              
 	}
-               
+        $liste_info=array();
+        foreach ($this->getCmd('info') as $cmd) {
+            if ($cmd->getLogicalId() != 'mode')
+                $liste_info[]=$cmd->getId();
+            
+             
+	}
+        $replace['#liste_info#'] = implode(',',$liste_info);
+             
         //roue
         if ($localEtat==1)
             $replace['#activate#'] = 'roue'; 
