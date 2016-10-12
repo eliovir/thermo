@@ -276,6 +276,7 @@ class ssaThermostat extends eqLogic {
         $ssaThermostatCmd->setValue($default);
 	$ssaThermostatCmd->setEventOnly($onlyEvent);
 	$ssaThermostatCmd->setSubType($subType);
+        $ssaThermostatCmd->setIsHistorized(1);
        // $ssaThermostatCmd->setIsVisible(1);
         foreach($configuration as $cle=>$valeur){
                 // Affichage
@@ -535,7 +536,42 @@ class ssaThermostat extends eqLogic {
         
     }
     
-    
+    private function isNotWorkable($date)
+    {
+ 
+        if ($date === null)
+        {
+            $date = time();
+        }
+ 
+        $date = strtotime(date('m/d/Y',$date));
+ 
+        $year = date('Y',$date);
+ 
+        $easterDate  = easter_date($year);
+        $easterDay   = date('j', $easterDate);
+        $easterMonth = date('n', $easterDate);
+        $easterYear   = date('Y', $easterDate);
+ 
+        $holidays = array(
+        // Dates fixes
+        mktime(0, 0, 0, 1,  1,  $year),  // 1er janvier
+        mktime(0, 0, 0, 5,  1,  $year),  // Fête du travail
+        mktime(0, 0, 0, 5,  8,  $year),  // Victoire des alliés
+        mktime(0, 0, 0, 7,  14, $year),  // Fête nationale
+        mktime(0, 0, 0, 8,  15, $year),  // Assomption
+        mktime(0, 0, 0, 11, 1,  $year),  // Toussaint
+        mktime(0, 0, 0, 11, 11, $year),  // Armistice
+        mktime(0, 0, 0, 12, 25, $year),  // Noel
+ 
+        // Dates variables
+        mktime(0, 0, 0, $easterMonth, $easterDay + 1,  $easterYear),
+        mktime(0, 0, 0, $easterMonth, $easterDay + 39, $easterYear),
+        mktime(0, 0, 0, $easterMonth, $easterDay + 50, $easterYear),
+        );
+ 
+      return in_array($date, $holidays);
+    }
     
     private  function getConsigne()
     {
@@ -546,7 +582,18 @@ class ssaThermostat extends eqLogic {
         
         if ( $this->getIsEnable() == 1)
         {
-    
+            //typeOfDay
+            $today= time();
+            if ($this->isNotWorkable($today))
+                $typeOfDay='f';
+            else
+            {   $day=array("d","l","ma","me","j","v","s");
+                $typeOfDay=$day[strftime("%w")];
+            }
+            
+            
+            
+            
             $time=date('Hi', time() );
             $now=DateTime::createFromFormat('Hi', $time);
 
@@ -559,13 +606,14 @@ class ssaThermostat extends eqLogic {
             $consignePlage= "plage par defaut";
             
             foreach ($plages as $plage)
-            { 
+            {   $calendrier=$plage["calendrier"];
+            
                 $debut = DateTime::createFromFormat('H:i', $plage["debut"]);
                 $fin = DateTime::createFromFormat('H:i', $plage["fin"]);
-                if ($now >= $debut &&  $now < $fin)
+                if ($now >= $debut &&  $now < $fin &&  in_array($typeOfDay,$calendrier ))
                 {   
                     
-                    $log_etat=sprintf('plage [%s]->[%s,%s]',$plage["name"],$plage["debut"],$plage["fin"]);
+                    $log_etat=sprintf('plage [%s]->[%s,%s] jour[%s]',$plage["name"],$plage["debut"],$plage["fin"],$typeOfDay);
                     log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
         
                 

@@ -45,7 +45,13 @@ $date = array(
 
 <script>
     $(".in_datepicker").datepicker();
-         $('#ui-datepicker-div').hide();
+    $('#ui-datepicker-div').hide();
+    
+ 
+    
+    
+    
+    
     $(function () {
     var seriesOptions = [],
         seriesCounter = 0,
@@ -53,7 +59,9 @@ $date = array(
         
     var color = {temperature:"#A5260A", consigne:"#0000FF", etat:"#2D241E"};
     
-
+    
+    
+    
     /*
      * Create the chart when all data is loaded
      * @returns {undefined}
@@ -134,15 +142,42 @@ $date = array(
                 height: '15%',
                 offset: 0,
                 lineWidth: 1,
-                max: 1
+                max: 1,
+                
             }],
             
-
+                
+             dataGrouping: {
+                    units: [
+                        ['hour', [1]],
+                        ['day', [1]],
+                        ['month', [1]],
+                        ['year', null]
+                    ],
+                    groupPixelWidth: 100
+                },
            
             tooltip: {
-                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> <br/>',
+                formatter: function() 
+                {
+                    var s = [];
+                
+                    $.each(this.points, function(i, point) 
+                    {   if (point.series.name=='etat')
+                        { res=(point.y > 0) ? 'on' : 'off';
+                        }    
+                        else
+                        { res=point.y.toFixed(1);
+                        }
+                        s.push('<span style="color:#D31B22;font-weight:bold;">'+ point.series.name +' : '+
+                        res +'<span>');
+                    });
+                    return s.join(' <br> ');
+
+                    
+                },
                 valueDecimals: 1,
-                split: true
+                
             },
 
             series: seriesOptions
@@ -207,8 +242,10 @@ $.each(names, function (i, name) {
                 name: data.result.cmd_name,
                 color: color[data.result.cmd_name],
                 data: data.result.data,
-                type: (data.result.cmd_name == 'etat') ?'column':'line',
-                yAxis:(data.result.cmd_name == 'etat') ? 1 : 0
+                type: (data.result.cmd_name == 'etat') ?'area':'line',
+                yAxis:(data.result.cmd_name == 'etat') ? 1 : 0,
+                step: (data.result.cmd_name == 'etat') ? true : false
+                
             };
             seriesCounter += 1;
 

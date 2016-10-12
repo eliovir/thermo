@@ -6,8 +6,6 @@ sendVarToJS('eqType', 'ssaThermostat');
 $eqLogics = eqLogic::byType('ssaThermostat');
 ?>
 
-
-
 <div class="row row-overflow">
     <div class="col-lg-2 col-md-3 col-sm-4">
         <div class="bs-sidebar">
@@ -206,6 +204,7 @@ foreach (object::all() as $object) {
                 <th class="col-sm-1">{{Debut}}</th>
                 <th class="col-sm-1">{{Fin}}</th>
                 <th class="col-sm-1">{{Temperature}}</th>
+                <th class="col-sm-2">{{Jour}}</th>
                 <th class="col-sm-1">{{Supprimer}}</th>
             </tr>
         </thead>
@@ -243,10 +242,8 @@ foreach (object::all() as $object) {
         <thead>
             <tr>
                 <th class="col-sm-1">{{Nom}}</th>
-                <th class="col-sm-1">{{Debut}}</th>
-                <th class="col-sm-1">{{Fin}}</th>
-                <th class="col-sm-1">{{Temperature}}</th>
-                <th class="col-sm-1">{{Supprimer}}</th>
+                <th class="col-sm-3">{{configuration}}</th>
+               
             </tr>
         </thead>
         <tbody>
@@ -272,8 +269,6 @@ foreach (object::all() as $object) {
 
 </div>
 </div>
-
-
 
 
 

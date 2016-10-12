@@ -101,6 +101,17 @@ function getPlage(table)
         plage.debut=$(this).find("input[name=debut]").val() ;  
         plage.fin=$(this).find("input[name=fin]").val() ;  
         plage.consigne=$(this).find("input[name=consigne]").val() ;  
+        var checked = [];
+        $(this).find('.ssaDaySwitch').each(function ()
+        {   
+            
+            if ($(this).bootstrapSwitch('state')==true)
+             checked.push($(this).attr('name'));
+         
+        });
+        
+        
+        plage.calendrier=checked;
         otArr.push(plage);
    })
  
@@ -142,7 +153,7 @@ function addPlage(_plage)
     tr += '        <span class="glyphicon glyphicon-minus"></span>';
     tr += '    </button>';
     tr += '</span>';
-    tr += '<input style="width : 140px;"id="consigne_'+ random +'"name="consigne" class="form-control" placeholder="{{Consigne}}" value="'+_plage.consigne +'" data-precision="1" data-step="0.5" data-min="5" data-max="25"/>';                
+    tr += '<input style="width : 80px;"id="consigne_'+ random +'"name="consigne" class="form-control" placeholder="{{Consigne}}" value="'+_plage.consigne +'" data-precision="1" data-step="0.5" data-min="5" data-max="25"/>';                
     
                     
     tr += '<span class="input-group-btn">';
@@ -157,13 +168,40 @@ function addPlage(_plage)
     
     
     tr += '</td>';
+    tr += '<td>';
+   
     
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{L}}" name="l"   id="l_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{Ma}}" name="ma" id="ma_'+ random +'">';
+    
+    tr += '<input type="checkbox"  class="ssaDaySwitch" data-label-text="{{Me}}" name="me" id="me_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{J}}" name="j" id="j_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{V}}" name="v" id="v_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{S}}" name="s" id="s_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{D}}"  name="d" id="d_'+ random +'">';
+    
+    tr += '<input type="checkbox" class="ssaDaySwitch" data-label-text="{{JF}}" name="f" id="f_'+ random +'">';
+    
+    
+    tr += '</td>';
     tr += '<td>';
     tr += '<a class=" btn btn-sm bt_removePlage btn-primary"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>';
     
     tr += '</td>';
     $('#table_plage tbody').append(tr);
+    $(".ssaDaySwitch").bootstrapSwitch('size', 'mini');
     
+    _plage.calendrier.forEach(function(element){
+        console.log(element+'_'+random);
+        $('#'+element+'_'+random).bootstrapSwitch('state',true);
+        });
+    console.log(_plage.calendrier);
 }
 
 
@@ -182,23 +220,23 @@ function addCmdToTable(_cmd) {
     if (!isset(_cmd.configuration)) {
         _cmd.configuration = {};
     }
+   
     var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
     tr += '<td>';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="id" style="display : none;">';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" style="display : none;">';
     tr += '<input class="cmdAttr form-control input-sm" data-l1key="subType" style="display : none;">';
-    tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}"></td>';
-    tr += '<td>';
-    if(!isset(_cmd.type) || _cmd.type == 'info' ){
-        tr += '<span><input type="checkbox" class="cmdAttr bootstrapSwitch" data-size="mini" data-label-text="{{Historiser}}" data-l1key="isHistorized" /></span>';
-    }
+    tr += '<input  readonly class="cmdAttr form-control input-sm" data-l1key="name" style="width : 140px;" placeholder="{{Nom}}"></td>';
     tr += '</td>';
+    
     tr += '<td>';
     if (is_numeric(_cmd.id)) {
         tr += '<a class="btn btn-default btn-xs cmdAction expertModeVisible" data-action="configure"><i class="fa fa-cogs"></i></a> ';
         tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fa fa-rss"></i> {{Tester}}</a>';
     }
+    tr += '</td>';
     tr += '</tr>';
+    
     $('#table_cmd tbody').append(tr);
     $('#table_cmd tbody tr:last').setValues(_cmd, '.cmdAttr');
     if (isset(_cmd.type)) {
@@ -206,3 +244,5 @@ function addCmdToTable(_cmd) {
     }
     jeedom.cmd.changeType($('#table_cmd tbody tr:last'), init(_cmd.subType));
 }
+
+
