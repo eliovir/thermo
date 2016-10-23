@@ -337,14 +337,20 @@ class ssaThermostat extends eqLogic {
             return '';
         }
         
+        
+        
         $_version = jeedom::versionAlias($_version);
+        
+        $log_etat=sprintf("entrer %s",$_version);
+        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
+       
+       
         $mc = cache::byKey('ssaThermostatWidget' . $_version . $this->getId());
+       
         if ($mc->getValue() != '') {
             return $mc->getValue();
         }
         
-        $log_etat=sprintf("entrer");
-        log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' : '.$log_etat);
             
         $localConsigne=$this->getConsigne();
         list($consigne_int, $consigne_dec)=explode(".", (double)$localConsigne);
@@ -362,6 +368,7 @@ class ssaThermostat extends eqLogic {
         
         $replace = array(
             '#id#' => $this->getId(),
+            '#uid#' => '_eq' . $this->getId() . eqLogic::UIDDELIMITER . mt_rand() . eqLogic::UIDDELIMITER,
             '#name#'=>$this->getName(),
             '#background_color#' => $this->getBackgroundColor($_version),
             '#eqLink#' => $this->getLinkToConfiguration(),
@@ -390,11 +397,14 @@ class ssaThermostat extends eqLogic {
              
         //roue
         if ($localEtat==1)
-            $replace['#activate#'] = 'roue'; 
+        {    $replace['#activate#'] = 'roue'; 
+             $replace['#activateTexte#'] = 'On' ;
+        }
         else
-            $replace['#activate#'] = ''; 
+        {    $replace['#activate#'] = ''; 
+             $replace['#activateTexte#'] = 'Off' ;
         
-        
+        }
         $html = template_replace($replace, getTemplate('core', $_version, 'simpleThermostat', 'ssaThermostat'));
         cache::set('ssaThermostatWidget' . $_version . $this->getId(), $html, 60);
         return $html;
@@ -405,17 +415,17 @@ class ssaThermostat extends eqLogic {
     public function refreshScreen()
     {   
         $_version = jeedom::versionAlias("dashboard"); 
-        $log_etat=sprintf("cle cache [ssaThermostatWidget%s%s]",  $_version , $this->getId());
-        //log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);
-               
-        
-        
-       
         $mc = cache::byKey('ssaThermostatWidget' . $_version . $this->getId());
         $mc->remove();
-	
-	//$weather->toHtml('mobile');
 	$this->toHtml('dashboard');
+        
+        
+        $_version = jeedom::versionAlias("mobile"); 
+        $mc = cache::byKey('ssaThermostatWidget' . $_version . $this->getId());
+        $mc->remove();
+	$this->toHtml('mobile');
+        
+	
 	$this->refreshWidget();
     }
     
@@ -772,6 +782,7 @@ class ssaThermostat extends eqLogic {
 
             } 
             $this->refreshScreen();
+            
          }
         
         
@@ -800,6 +811,9 @@ class ssaThermostatCmd extends cmd {
     {   
         $eqLogic = $this->getEqLogic();
         log::add('ssaThermostat','debug',  $eqLogic->getHumanName().'['.__FUNCTION__.']' . ' : appel '.$this->getLogicalId());
+       
+               
+        
         if ($this->getLogicalId() == 'rollUp') 
         {  $eqLogic->roll(array('thermostat_id' => intval($eqLogic->getId()),'action' =>'up' ));
 

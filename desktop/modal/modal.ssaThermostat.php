@@ -190,7 +190,7 @@ $date = array(
 
  
     
-$.each(names, function (i, name) {
+    $.each(names, function (i, name) {
 
         $.ajax({// fonction permettant de faire de l'ajax
         type: "POST", // methode de transmission des données au fichier php

@@ -1,0 +1,127 @@
+
+<div  style="width:260px;height:300px;" class="eqLogic eqLogic-widget "  data-category="#category#" data-eqLogic_id="#id#" data-version="mobile">
+    
+     <div class="widget-name">
+         <center>
+            <span style="font-size : 1.2em;">#name#</span><br/>
+         </center>
+     </div>
+     <link rel="stylesheet" href="plugins/ssaThermostat/core/template/mobile/css/thermometre.css" />
+   
+    <div class="ssaTempcontainer">
+       
+        <div class="ssaThermo-table">
+          <div class="ssaThermo-plan">
+                <h3>
+                  <span>
+                    <div  class="ssaThermostatPos" id="gaugeTemperature#uid#"></div>
+                     <div class="deneme">
+                       <div class="ssaTemp">#temp_int#</div>
+                       <div class="ssaTempDegre">&deg;</div>
+                       <div class="ssaTempDecimal">#temp_dec#</div>
+                     </div>
+                  </span>
+                </h3>
+
+                <ul>
+                    <li>mode :<b>"#mode_lib#"</b><br>
+                    etat :<b>"#activateTexte#"</b></li>
+                </ul>
+           </div>
+        </div>
+
+        <div class="ssaThermo-table">
+          <div class="ssaThermo-plan">
+                <a class="ssaThermo-button" onclick="jeedom.cmd.execute({id: #cmd_rollDown_id#});">mode -</a>
+                <a class="ssaThermo-button" onclick="jeedom.cmd.execute({id: #cmd_rollUp_id#});">mode +</a>
+        
+           </div>
+        </div>
+    </div>
+        
+    
+
+
+<script>
+    
+    
+   
+
+     $('#gaugeTemperature#uid#').highcharts({
+       chart: {
+         plotBackgroundColor: null,
+         plotBorderWidth: 0,
+         plotShadow: false,
+         backgroundColor: 'transparent',
+         margin: 0, 
+         width: 216,
+         height: 160
+       },
+       credits: {
+         enabled: false
+       },
+       title: {
+         text: '',
+         align: 'center',
+         verticalAlign: 'middle',
+         y: 40
+       },
+       tooltip: {
+         enabled: false,
+       },
+       plotOptions: {
+         pie: {
+           dataLabels: {
+             enabled: false,
+             distance: -50,
+             style: {
+               fontWeight: 'bold',
+               color: 'white'
+             }
+           },
+           startAngle: -110,
+           endAngle: 110,
+           center: ['50%', '75%']
+         }
+       },
+       series: [{
+         type: 'pie',
+         name: 'Temperature',
+         data: [
+           ['temp', #temp_int#],
+           ['max', 40 - #temp_int#],
+
+         ],
+         states: {
+           hover: {
+             enabled: false
+           }
+         },
+         innerSize: "60%",
+         outerSize: "55%"
+       }, {
+         type: 'pie',
+         name: 'Consigne',
+         data: [
+           ['temp', #consigne_int#],
+           ['max', 40 - #consigne_int#],
+
+         ],
+         states: {
+           hover: {
+             enabled: false
+           }
+         },
+         innerSize: "74%",
+         outerSize: "69%"
+       }]
+
+
+     });
+
+   
+
+
+    </script>
+
+</div>

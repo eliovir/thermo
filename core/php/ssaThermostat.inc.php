@@ -26,7 +26,8 @@ require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
  */
 
 include_file('core', 'ssaThermostat', 'class', 'ssaThermostat');
+
+
 require_once dirname(__FILE__) . '/../../3rdparty/pid/ssaThermostatPID.class.php';
-//include_file('3rdparty/pid', 'ssaThermostatPID', 'class','ssaThermostat');
 
 ?>
