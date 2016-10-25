@@ -76,12 +76,14 @@
         
     </div>
         <script>
-            
-            
+            if ('#$errState#' != 'ok')
+            {
+               $('#div_alert').showAlert({message: '#result_msg#', level: 'danger'});
+            }
             $( document ).ready(function() {
                 
                 $('.ssaThermoButton_#id#').click(function() {
-                    var currentId = $(this).attr('id');
+                    var currentId = $(this).attr('id'); 
                     jeedom.cmd.execute({id: currentId});   
                 });
                 

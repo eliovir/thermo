@@ -90,7 +90,7 @@ foreach (object::all() as $object) {
                 <label class="col-sm-2 control-label">{{Sonde}}</label>
                 <div class="col-sm-4" >
                     <input type="text" class="col-sm-2 eqLogicAttr form-control" data-l1key="configuration" data-l2key="commande" data-l3key="tempSonde" />
-                    <a class="btn btn-default btn-sm cursor listEquipementAction" data-input="configuration" style="margin-left : 5px;"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>
+                    <a class="btn btn-default btn-sm cursor listEquipementInfo" data-input="configuration" style="margin-left : 5px;"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>
                 </div>
             </div>
             

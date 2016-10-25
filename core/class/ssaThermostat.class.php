@@ -29,7 +29,8 @@ class ssaThermostat extends eqLogic {
     /*
      * Fonction exécutée automatiquement toutes les minutes par Jeedom
      */
-    
+    private  $_errState="ok";
+    private  $_errMsg="";
     
     
     public static function cron() 
@@ -65,7 +66,7 @@ class ssaThermostat extends eqLogic {
     /*     * *********************Méthodes d'instance************************* */
     private function setOnOff($ordre)
     {   
-        
+        $cmd=array('CmdOff','CmdOn');
         if ( $this->getIsEnable() == 1)
         {   $ssaCmdEtat= $this->getCmd(null, 'etat');
             $ssaCmdEtat->setConfiguration('etat_id', $ordre);
@@ -76,7 +77,17 @@ class ssaThermostat extends eqLogic {
             
             //commande
             
-            
+            //excecute
+            try {
+                $ssacommandePilote=$this->getConfiguration('commande');
+                //CmdOff
+                $localTemp=cmd::byString($ssacommandePilote[$cmd[$ordre] ])->execCmd();
+                            
+                } catch (Exception $exc) {
+                    log::add('ssaThermostat', 'error', $this->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
+                    $this->_errState='Err';
+                    $this->_errMsg=$exc->getMessage();
+                }
             log::add('ssaThermostat','debug', $this->getHumanName().'['.__FUNCTION__.']' .  ' :  change to '.$ordre );
         }
         
@@ -353,12 +364,12 @@ class ssaThermostat extends eqLogic {
         
             
         $localConsigne=$this->getConsigne();
-        list($consigne_int, $consigne_dec)=explode(".", (double)$localConsigne);
+        list($consigne_int, $consigne_dec)=explode(".",number_format( (double)$localConsigne,1));
          
        
         $localMode=$this->getModeLib();
         $localTemp=$this->getTemperature();
-        list($temp_int, $temp_dec)=explode(".", (double)$localTemp);
+        list($temp_int, $temp_dec)=explode(".",number_format( (double)$localTemp,1));
         $localEtat=$this->getEtat();
        
        
@@ -405,6 +416,8 @@ class ssaThermostat extends eqLogic {
              $replace['#activateTexte#'] = 'Off' ;
         
         }
+        $replace['#$errState#'] = $this->_errState;
+        $replace['#result_msg#'] = htmlentities($this->getName().": ".str_replace("'", " ", $this->_errMsg));
         $html = template_replace($replace, getTemplate('core', $_version, 'simpleThermostat', 'ssaThermostat'));
         cache::set('ssaThermostatWidget' . $_version . $this->getId(), $html, 60);
         return $html;
@@ -515,8 +528,9 @@ class ssaThermostat extends eqLogic {
                 $localTemp=cmd::byString($ssacommandePilote["tempSonde"])->execCmd();
                             
                 } catch (Exception $exc) {
-                    log::add('ssaThermostat', 'error', $ssaEqlogicObj->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
-                    
+                    log::add('ssaThermostat', 'error', $this->getHumanName().'['.__FUNCTION__.']' .' : ' . $exc->getMessage());
+                    $this->_errState='Err';
+                    $this->_errMsg=$exc->getMessage();
                 }
         }
 
@@ -641,6 +655,8 @@ class ssaThermostat extends eqLogic {
                 $consigneTemp = $default["hgTemp"];
                 $consignePlage= "temperature hors gel";
             }
+            //float
+            $consigneTemp=  number_format($consigneTemp, 1);
             
             $log_etat=sprintf('plage [%s] consigne [%s]',$consignePlage,$consigneTemp);
             log::add('ssaThermostat','debug',  $this->getHumanName().'['.__FUNCTION__.']' .  ' : '. $log_etat);

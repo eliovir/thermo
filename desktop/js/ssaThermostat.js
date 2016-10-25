@@ -21,24 +21,29 @@
  {
    
       
-     $("#dtBox").DateTimePicker(
-			    {
-			        titleContentTime: "Heure",
-                                isPopup: true,
-			        minuteInterval: 15,
-                                langage: "fr",
-                                setButtonContent: "Ok",
-                                clearButtonContent: "Effacer"
-			    });
-      
-     
-        
+    $("#dtBox").DateTimePicker(
+            {
+                titleContentTime: "Heure",
+                isPopup: true,
+                minuteInterval: 1,
+                langage: "fr",
+                setButtonContent: "Ok",
+                clearButtonContent: "Effacer"
+            });
+  
+    
    
  });
 
+$("#table_plage").delegate('.ssaThermoPlageDeb', 'change', function () {
+    console.log($( this ).val());     
+    $( this ).closest('tr').find('.ssaThermoPlageFin').attr('data-min', $( this ).val());
+  
+   
+     
+});
 
-
-$("#cmd_ssa").delegate(".listEquipementAction", 'click', function() {
+$("#cmd_ssa").delegate(".listEquipementInfo", 'click', function() {
     var el = $(this);
     jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function(result) {
         var calcul = el.closest('div').find('.eqLogicAttr[data-l1key=configuration]');
@@ -47,6 +52,14 @@ $("#cmd_ssa").delegate(".listEquipementAction", 'click', function() {
     });
 });
 
+$("#cmd_ssa").delegate(".listEquipementAction", 'click', function() {
+    var el = $(this);
+    jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function(result) {
+        var calcul = el.closest('div').find('.eqLogicAttr[data-l1key=configuration]');
+        
+        calcul.atCaret('insert', result.human);
+    });
+});
 
 $("#table_plage").delegate('.bt_removePlage', 'click', function () {
     $(this).closest('.plage').remove();
@@ -134,12 +147,12 @@ function addPlage(_plage)
     tr += '</td>';
     
     tr += '<td>';
-    tr += '<input name="debut" data-field="time" readonly class="form-control" placeholder="{{heure Début}}" value="'+_plage.debut +'">';
+    tr += '<input name="debut" data-field="time" data-max="23:59" readonly class="form-control ssaThermoPlageDeb" placeholder="{{heure Début}}" value="'+_plage.debut +'">';
     tr += '</td>';
     
     tr += '<td>';
    
-    tr += '<input name="fin" data-field="time" readonly class="form-control" placeholder="{{heure Fin}}" value="'+_plage.fin +'">';
+    tr += '<input name="fin" data-field="time" data-max="23:59" readonly class="form-control ssaThermoPlageFin" placeholder="{{heure Fin}}" value="'+_plage.fin +'">';
     tr += '</td>';
     
     
