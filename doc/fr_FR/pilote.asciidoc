@@ -1,0 +1,27 @@
+=== Pilote
+
+
+image::../images/pilote.png[]
+
+
+[NOTE]
+il s'agit dans cette section de configurer les commandes qui vont permettrent au Thermostat d'interagir avec votre domotique.
+
+
+
+.Ces  commandes sont :
+. Sonde
+[literal]
+La sonde de température permet d'indiquer au Thermostat la commande qui va lui permetre de relever la température d'ambiance de votre piece.
+. Commande ON
+[literal]
+Cette commande permet d'indiquer au Thermostat la commande à utiliser pour mettre en route votre chaudiere ou radiateur
+. Commande Off
+[literal]
+Cette commande permet d'indiquer au thermostat la commande à utiliser pour arreter votre chaudiere ou radiateur
+
+
+
+[TIP]
+Pour configurer une commande, il faut utiliser le bouton "Rechercher un équipement".
+Les commandes disponible pour la Sonde sont des commandes de type "Info".

@@ -1,0 +1,10 @@
+'''
+==== Configuration du plugin
+include::configuration_pluging.asciidoc[]
+
+'''
+==== Configuration d'un objet
+include::configuration_objet_1.asciidoc[]
+
+'''
+

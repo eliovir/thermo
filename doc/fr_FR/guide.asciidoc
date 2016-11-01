@@ -1,0 +1,80 @@
+==== Mode d'emplois du thermostat.
+
+
+L'utilisaion du themostat est simple et intuitif. Le Thermosat dispose de deux boutons "mode -" et "mode +". +
+Ces deux boutons permettent de passer succesiffement  sur les modes suivants :
+
+*  off  : le thermostat est en arrêt forcé,
+*  on   : le thermostat est en marche forcé, la chaudiere est donc en route,
+*  auto : le thermostat est en mode pilote, la chaudiere sera mise en marche en fonction de la température de consigne et de la température d'ambiance,
+*  Hors gel : le thermostat est en mode pilote, la chaudiere sera mise en marche pour maintenire la température de consigne "Hors gel".
+
+
+:imagesdir: ../images
+
+.Widget 'Desktop'
+[cols="2,3"]
+|===
+
+a|.vue desktop
+image::thermo_desc.png[height=300,width=500,role="left"]
+a|
+[guide]
+.guide
+--
+.... Ring : ce disque animé est present lorsque la chaudiere est en marche.
+.... Mode : cet indicateur indique le mode de fonctionnement du thermostat. +
+(Off > On > Auto > Hors Gel
+.... Temperature : Température de la piece
+.... Consigne : Température de consigene (température à atteindre)
+.... Mode + : Bouton permettantde changer de mode
+.... Mode - : Bouton permettant de changer de mode
+.... Historique : permet d'acceder au graphique statistique
+--
+
+|===
+
+
+
+.Widget 'mobile'
+[cols="2,3"]
+|===
+
+a|.vue desktop
+image::mobile_desc.png[height=300,width=500,role="left"]
+a|
+[guide]
+.guide
+--
+.... Ring Consigne: Indicateur Temperature de consigne
+.... Ring Température : Indicateur du niveau de température Ambiante
+.... Temperature : Température de la piece
+.... Mode : cet indicateur indique le mode de fonctionnement du thermostat. +
+(Off > On > Auto > Hors Gel
+.... Etat : cet indicateur indique l'état de fonctionnement de la chaudiere
+.... Mode + : Bouton permettantde changer de mode
+.... Mode - : Bouton permettant de changer de mode
+
+--
+
+|===
+
+
+.Statistique
+[cols="4,1"]
+|===
+
+a|.Statistique
+image::histo_desc.png[height=300,width=800,role="left"]
+a|
+[guide]
+.guide
+--
+.... Température
+.... Consigne
+.... Etat chaudiere
+
+
+--
+
+|===
