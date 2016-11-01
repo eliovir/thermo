@@ -64,7 +64,8 @@
 
 .ssaThermoResume
 {
-    float:left;
+    margin-left: auto;
+    margin-right: auto;
     width:25%;
     height:50%;
     display : inline;
