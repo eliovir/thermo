@@ -139,7 +139,7 @@ foreach (object::all() as $object) {
             
             
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{Temperature Defaut}}</label>
+                <label class="col-sm-2 control-label">{{Temperature par Defaut}}</label>
                 <div class="col-sm-3 input-group">
                    
                     
