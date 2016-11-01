@@ -1,5 +1,5 @@
 
-<div  style="width:260px;height:300px;" class="eqLogic eqLogic-widget "  data-category="#category#" data-eqLogic_id="#id#" data-version="mobile">
+<div   class="eqLogic eqLogic-widget "  data-category="#category#" data-eqLogic_id="#id#" data-version="mobile">
     
      <div class="widget-name">
          <center>
@@ -10,7 +10,7 @@
    
     <div class="ssaTempcontainer">
        
-        <div class="ssaThermo-table">
+        <div class="ssaThermo-table" id="ssaThermo#id#">
           <div class="ssaThermo-plan">
                 <h3>
                   <span>
@@ -44,7 +44,13 @@
 
 <script>
     
+  $( document ).ready(function() {
+     _width=211;
+     _width=parseInt($( '#ssaThermo#id#' ).width() *98 / 100);
+     console.log(_width);
+   
     
+   
    
 
      $('#gaugeTemperature#uid#').highcharts({
@@ -54,7 +60,7 @@
          plotShadow: false,
          backgroundColor: 'transparent',
          margin: 0, 
-         width: 216,
+         width: _width,
          height: 160
        },
        credits: {
@@ -121,6 +127,8 @@
 
    
 
+});
+    
 
     </script>
 
