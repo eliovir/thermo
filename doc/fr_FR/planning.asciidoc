@@ -1,8 +1,9 @@
-=== Gestion des plages
+:imagesdir: ../images
+==== Gestion des plages
 
 Le plungin Thermostat offre la possibilité de créer des plages spécifiques de controle.
 
-image::../images/plage.png[]
+image::plage.png[]
 
 
 
@@ -18,7 +19,7 @@ Pour créer une plage, il faut cliquer sur le bouton "Créer une plage".  Cela a
 
 
 
-==== Configuration
+===== Configuration
 
 
 Rien de plus simple. commencez par donner un nom à votre plage et fixez les différents parametres
@@ -27,7 +28,7 @@ Rien de plus simple. commencez par donner un nom à votre plage et fixez les dif
 
 L'heure de début ou de fin d'une plage se définit grace à cette fenetre.
 
-image::../images/horaire.png[]
+image::horaire.png[]
 [TIP]
 Vous pouvez utilisez les bouton + ou - pour dimineur l'heure et les minutes ou les entrer directement à l'aide de votre clavier.
 

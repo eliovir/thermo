@@ -1,4 +1,5 @@
+:imagesdir: ../images
 Apres le  telechargement du plugin, il vous suffit juste d'activer celui-ci, il n'y a aucune configuration a ce niveau.
 
 
-image::../images/plugin.png[]
+image::plugin.png[]

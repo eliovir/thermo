@@ -1,3 +1,4 @@
+:imagesdir: ../images
 ==== Le chauffage est le poste le plus important dans la consommation d’énergie d’une maison sous les latitudes tempérées.
 
 
@@ -10,11 +11,11 @@ Ce plugin permet de programmer différentes plage de fonctionnement en reglant f
 
 
 .vue desktop
-image::../images/thermo.png[height=300,width=300,role="left"]
+image::thermo.png[height=300,width=300,role="left"]
 .vue mobile
-image::../images/mobile.png[height=300,width=300,role="left"]
+image::mobile.png[height=300,width=300,role="left"]
 .historique
-image::../images/histo.png[height=300,width=800,role="center"]
+image::histo.png[height=300,width=800,role="center"]
 
 
 

@@ -1,27 +1,11 @@
+:imagesdir: ../images
 === Temperature par defaut
 
 
-image::../images/default.png[]
+image::default.png[]
 
 
 [NOTE]
 il s'agit dans cette section de configurer les Consignes de température par defaut du thermostat. Ces consignes sont utilisées lorsque qu l'on est pas dans une plage de fonctionnement definis ou lorsque le mode hors gel est activé.
 
 
-
-.Ces  commandes sont :
-. Sonde
-[literal]
-La sonde de température permet d'indiquer au Thermostat la commande qui va lui permetre de relever la température d'ambiance de votre piece.
-. Commande ON
-[literal]
-Cette commande permet d'indiquer au Thermostat la commande à utiliser pour mettre en route votre chaudiere ou radiateur
-. Commande Off
-[literal]
-Cette commande permet d'indiquer au thermostat la commande à utiliser pour arreter votre chaudiere ou radiateur
-
-
-
-[TIP]
-Pour configurer une commande, il faut utiliser le bouton "Rechercher un équipement".
-Les commandes disponible pour la Sonde sont des commandes de type "Info".
