@@ -1,2 +1,3 @@
 
-version : dev 7 nov 2016
+.version : dev 7 nov 2016
+correction "--var(variable)"
