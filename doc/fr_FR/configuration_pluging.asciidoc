@@ -1,0 +1,16 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  "configuration plugin"
+:page-liquid:
+:icons:
+:imagesdir: ../images
+
+
+== Configuration du plugin
+'''
+
+Apres le  telechargement du plugin, il vous suffit juste d'activer celui-ci, il n'y a aucune configuration a ce niveau.
+
+
+image::plugin.png[]

@@ -1,0 +1,24 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  changelog
+:page-liquid:
+:icons:
+:imagesdir: ../images
+
+
+
+== Changelog
+'''
+.version : dev 13 nov 2016
+* ajout mode absence
+* ajout pour les scénarios des commandes
+** presence
+** absence
+** horgels
+* ajout de la possibilité de commander plusieurs appareils (utiliser les && )
+
+.version : dev 7 nov 2016
+* correction "bogue graphique window 7 & 8"
+
+

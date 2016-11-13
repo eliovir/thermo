@@ -1,0 +1,14 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  roadmap
+:page-liquid:
+:icons:
+
+
+== Roadmap
+'''
+
+.janvier 2017
+* ajout shunt "fenetre ouverte"
+* ajout mode "absence"

@@ -1,0 +1,11 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  faq
+:page-liquid:
+:icons:
+
+
+== FAQ
+'''
+Pas de questions pour le moment.

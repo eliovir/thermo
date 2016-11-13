@@ -1,0 +1,39 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  description
+:page-liquid:
+:icons:
+:imagesdir: ../images
+
+== Description
+'''
+
+=== Le chauffage est le poste le plus important dans la consommation d’énergie d’une maison sous les latitudes tempérées.
+
+
+
+Ce plugin permet de créer et gérer des thermostats, pour piloter le chauffage de votre domicile.
+Il  seduira les personnes désireuse de mieux gérer leurs dépenses d'énérgie en visualisant sa courbe de température et son historique de chauffe.
+
+[NOTE]
+Ce plugin permet de programmer différentes plage de fonctionnement en reglant finement la température souhaité. Pas besoins de plugin supplémentaire, ce thermostat intergre une gestion de planning.
+
+
+.vue desktop
+image::thermo.png[height=300,width=300,role="left"]
+.vue mobile
+image::mobile.png[height=300,width=300,role="left"]
+.historique
+image::histo.png[height=300,width=800,role="center"]
+
+
+
+=== L'algorithme  de controle mis en place est un algorithme avec une régulation par PID. +
+[TIP]
+La régulation PID est la solution la plus performante pour réguler une chaudière +
+Le thermostat va gérer la chaudière via des cycles dont la durée  varie en fonction de l’inertie du système de chauffage. +
+Plus la température mesurée se rapprochera de la température de consigne, plus le pourcentage de temps ou la chaudière sera activée diminuera. +
+C’est ce que l’on appelle le système proportionnel. +
+De ce fait, ce système est à la fois plus économique et surtout plus confortable que le système de type « tout ou rien » à hystérésis.
+

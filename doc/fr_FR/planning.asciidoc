@@ -1,0 +1,66 @@
+:Date: $Date$
+:Revision: $Id$
+:docinfo:
+:title:  planning
+:page-liquid:
+:icons:
+:imagesdir: ../images
+
+==== Gestion des plages
+
+Le plungin Thermostat offre la possibilité de créer des plages spécifiques de controle.
+
+image::plage.png[]
+
+
+
+
+[TIP]
+Imaginons que vous ayez definis une temprétaure par défaut de 19°c mais que tous les matins vous avez besoins d'une température différente. Les plages sont la pour ça !
+
+
+
+[NOTE]
+Pour créer une plage, il faut cliquer sur le bouton "Créer une plage".  Cela ajoute alors une plage vide dans la liste des plages.
+
+
+
+
+==== Configuration
+
+
+Rien de plus simple. commencez par donner un nom à votre plage et fixez les différents parametres
+
+==== Heure de début/fin de la plage
+
+L'heure de début ou de fin d'une plage se définit grace à cette fenetre.
+
+image::horaire.png[]
+[TIP]
+Vous pouvez utilisez les bouton + ou - pour dimineur l'heure et les minutes ou les entrer directement à l'aide de votre clavier.
+
+
+.. Heure de début de la plage
+[literal]
+Permet de définir l'heure de début d'une plage.
+.. Heure de fin de la plage
+[literal]
+Permet de définir l'heure de fin d'une plage.
+
+[TIP]
+l'Heure de fin est focément supérieure à l'heure de début.
+
+
+
+==== Température de consigne
+[literal]
+Ce parametre  permet d'indiquer au thermostat la température de consigne à utiliser pour cette plage
+
+==== Jour d'application
+[literal]
+il sagit ici d'un planning d'application de la plage. Vous pouvez choisir d'ppliquer votre consigne le lundi, le samedi ou les jours ferié.
+
+
+
+[TIP]
+Vous pouvez créer une multitude de plage correspondant à vos besoins. Choisir la températured e consigne au reveil les jour de semaine ou de decider de chauffer moins pendant votre absence.
