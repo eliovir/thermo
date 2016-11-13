@@ -181,6 +181,26 @@ foreach (object::all() as $object) {
                 </div>
             </div>
             
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{Temperature Absence}}</label>
+                <div class="col-sm-3 input-group">
+                   
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" data-value="decrease" data-target="#AbsTemp" data-toggle="spinner">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </span>
+                    
+                    <input id="AbsTemp" type="text" class="col-sm-2 eqLogicAttr form-control" data-l1key="configuration" data-l2key="defaultTemp" data-l3key="AbsTemp" data-precision="1" data-step="0.5" data-min="5" data-max="15"/>
+                
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" data-value="increase" data-target="#AbsTemp" data-toggle="spinner">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </span>
+                
+                </div>
+            </div>
             
            
             
