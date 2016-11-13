@@ -1,3 +1,0 @@
-
-.version : dev 7 nov 2016
-* correction "bogue graphique window 7 & 8"
